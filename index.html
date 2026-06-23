@@ -1,306 +1,294 @@
-```html
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ETS2 Mod Optimizer</title>
-
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
 <style>
-body{
-    background:#0f1115;
-    color:white;
-    font-family:Arial, sans-serif;
-}
-
-.gradient{
-    background:linear-gradient(135deg,#ffb000,#ff6a00);
-}
-
-.dropzone{
-    border:2px dashed #ffb000;
-    transition:.3s;
-}
-
-.dropzone:hover{
-    border-color:#ff6a00;
-    background:rgba(255,176,0,.05);
-}
-
-.card{
-    background:#1a1d24;
-    border:1px solid #2a2f3a;
-}
-
-.progress{
-    height:12px;
-    background:#2a2f3a;
-    border-radius:999px;
-    overflow:hidden;
-}
-
-.progress-bar{
-    height:100%;
-    width:0%;
-    background:linear-gradient(90deg,#ffb000,#ff6a00);
-    transition:.3s;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:1rem 0}
+.header{background:#ff8c00;border-radius:var(--border-radius-lg);padding:1.5rem;text-align:center;margin-bottom:1.25rem}
+.header h1{font-size:22px;font-weight:500;color:#fff}
+.header p{font-size:13px;color:rgba(255,255,255,.85);margin-top:4px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1rem}
+.dropzone{border:2px dashed #ff8c00;border-radius:var(--border-radius-md);padding:2rem 1rem;text-align:center;cursor:pointer;transition:background .2s}
+.dropzone:hover,.dropzone.over{background:rgba(255,140,0,.07);border-color:#e65c00}
+.dropzone.loaded{border-color:#3B6D11;background:rgba(59,109,17,.06)}
+.dz-icon{font-size:28px;color:#ff8c00;margin-bottom:8px}
+.dz-label{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.dz-sub{font-size:13px;color:var(--color-text-secondary);margin-top:4px}
+.fl{font-size:13px;color:var(--color-text-secondary);display:block;margin-bottom:6px;margin-top:1rem}
+.progress-track{height:10px;background:var(--color-background-secondary);border-radius:999px;overflow:hidden;margin-top:1rem}
+.progress-fill{height:100%;width:0%;background:#ff8c00;border-radius:999px;transition:width .2s}
+.status-txt{font-size:13px;color:var(--color-text-secondary);margin-top:8px;text-align:center;min-height:18px}
+.btn-main{width:100%;padding:11px;background:#ff8c00;border:none;border-radius:var(--border-radius-md);color:#fff;font-size:15px;font-weight:500;cursor:pointer;margin-top:1rem}
+.btn-main:disabled{opacity:.4;cursor:not-allowed}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:1rem}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
+.metric-label{font-size:12px;color:var(--color-text-secondary)}
+.metric-value{font-size:17px;font-weight:500;color:var(--color-text-primary);margin-top:3px}
+.metric-value.green{color:var(--color-text-success)}
+.btn-dl{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;border-radius:var(--border-radius-md);font-size:14px;font-weight:500;cursor:pointer;border:none;margin-bottom:8px;color:#fff;background:#ff8c00}
+.btn-dl.sec{background:none;border:0.5px solid var(--color-border-secondary);color:var(--color-text-primary)}
+.log-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;font-size:12px;font-family:var(--font-mono);color:var(--color-text-secondary);max-height:140px;overflow-y:auto;line-height:1.7;white-space:pre-wrap}
+.sec-title{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:1rem}
+#report{display:none}
+.bar-wrap{margin-top:.75rem}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--color-text-secondary)}
+.bar-bg{flex:1;height:8px;background:var(--color-background-secondary);border-radius:999px;overflow:hidden}
+.bar-inner{height:100%;border-radius:999px;background:#ff8c00}
+.bar-inner.new{background:#3B6D11}
 </style>
-</head>
 
-<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
-<header class="gradient py-6 shadow-lg">
-<div class="container mx-auto px-4">
-<h1 class="text-4xl font-bold text-center">
-🚛 ETS2 Mod Optimizer
-</h1>
-<p class="text-center mt-2">
-Otimize seus mods do Euro Truck Simulator 2 em poucos cliques
-</p>
-</div>
-</header>
+<div class="wrap">
+<h2 class="sr-only">ETS2 Mod Optimizer — otimizador de mods do Euro Truck Simulator 2</h2>
 
-<main class="container mx-auto px-4 py-10">
-
-<div class="card rounded-2xl p-8 max-w-4xl mx-auto">
-
-<h2 class="text-2xl font-bold mb-6 text-center">
-Enviar Mod
-</h2>
-
-<div id="dropzone"
-class="dropzone rounded-xl p-12 text-center cursor-pointer">
-
-<p class="text-xl mb-2">
-Arraste seu arquivo aqui
-</p>
-
-<p class="text-gray-400">
-Formatos suportados: .scs e .zip
-</p>
-
-<input
-type="file"
-id="fileInput"
-accept=".scs,.zip"
-class="hidden">
-
-<button
-onclick="document.getElementById('fileInput').click()"
-class="mt-6 px-6 py-3 gradient rounded-xl font-bold">
-Selecionar Arquivo
-</button>
-
+<div class="header">
+  <h1>ETS2 Mod Optimizer</h1>
+  <p>Otimize mods do Euro Truck Simulator 2 diretamente no navegador</p>
 </div>
 
-<div class="mt-8">
-<label class="block mb-2 font-bold">
-Modo de Otimização
-</label>
+<div class="card">
+  <div id="dropzone" class="dropzone" onclick="document.getElementById('fi').click()">
+    <div class="dz-icon"><i class="ti ti-file-zip" aria-hidden="true"></i></div>
+    <p class="dz-label">Arraste seu arquivo aqui</p>
+    <p class="dz-sub">Formatos suportados: .scs e .zip</p>
+    <button style="margin-top:12px;padding:7px 18px;background:#ff8c00;border:none;border-radius:var(--border-radius-md);color:#fff;font-size:13px;cursor:pointer" onclick="event.stopPropagation();document.getElementById('fi').click()">Selecionar arquivo</button>
+  </div>
+  <input type="file" id="fi" accept=".scs,.zip" style="display:none">
 
-<select id="mode"
-class="w-full bg-gray-800 p-3 rounded-xl">
+  <label class="fl">Modo de otimização</label>
+  <select id="mode" style="width:100%">
+    <option value="leve">Leve — remove apenas lixo (.tmp, .bak, .log, .DS_Store)</option>
+    <option value="balanceado" selected>Balanceado — leve + duplicatas, thumbs, __MACOSX</option>
+    <option value="agressivo">Agressivo — balanceado + .psd/.ai, docs, maior compressão</option>
+  </select>
 
-<option value="leve">Leve</option>
-<option value="balanceado" selected>Balanceado</option>
-<option value="agressivo">Agressivo</option>
-
-</select>
+  <button class="btn-main" id="btnOt" onclick="run()" disabled>Otimizar mod</button>
+  <div class="progress-track"><div class="progress-fill" id="pb"></div></div>
+  <p class="status-txt" id="st">Aguardando arquivo...</p>
 </div>
 
-<button
-onclick="optimizeMod()"
-class="w-full mt-8 py-4 gradient rounded-xl text-lg font-bold">
+<div class="card" id="report">
+  <p class="sec-title">Relatório de otimização</p>
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Tamanho original</div><div class="metric-value" id="mO">—</div></div>
+    <div class="metric"><div class="metric-label">Tamanho otimizado</div><div class="metric-value" id="mN">—</div></div>
+    <div class="metric"><div class="metric-label">Economia</div><div class="metric-value green" id="mE">—</div></div>
+    <div class="metric"><div class="metric-label">Redução</div><div class="metric-value green" id="mP">—</div></div>
+    <div class="metric"><div class="metric-label">Arquivos lidos</div><div class="metric-value" id="mT">—</div></div>
+    <div class="metric"><div class="metric-label">Removidos</div><div class="metric-value" id="mR">—</div></div>
+  </div>
 
-Otimizar Mod
+  <div class="bar-wrap">
+    <div class="bar-row">
+      <span style="min-width:80px">Original</span>
+      <div class="bar-bg"><div class="bar-inner" id="barO" style="width:100%"></div></div>
+      <span id="barOlbl" style="min-width:60px;text-align:right"></span>
+    </div>
+    <div class="bar-row">
+      <span style="min-width:80px">Otimizado</span>
+      <div class="bar-bg"><div class="bar-inner new" id="barN"></div></div>
+      <span id="barNlbl" style="min-width:60px;text-align:right"></span>
+    </div>
+  </div>
 
-</button>
+  <label class="fl" style="margin-top:1rem">Log de otimização</label>
+  <div class="log-box" id="log"></div>
 
-<div class="mt-8">
-<div class="progress">
-<div id="progressBar" class="progress-bar"></div>
+  <button class="btn-dl" style="margin-top:1rem" id="btnZip" onclick="dl('zip')">
+    <i class="ti ti-download" aria-hidden="true"></i> Baixar mod otimizado (.zip)
+  </button>
+  <button class="btn-dl sec" id="btnScs" onclick="dl('scs')">
+    <i class="ti ti-download" aria-hidden="true"></i> Baixar como .scs
+  </button>
 </div>
-
-<p id="status" class="mt-3 text-center text-gray-400">
-Aguardando arquivo...
-</p>
-
 </div>
-
-</div>
-
-<div id="report"
-class="card rounded-2xl p-8 mt-10 hidden">
-
-<h2 class="text-2xl font-bold mb-6">
-Relatório de Otimização
-</h2>
-
-<div class="grid md:grid-cols-2 gap-4">
-
-<div>Tamanho Original: <strong>1.2 GB</strong></div>
-<div>Tamanho Otimizado: <strong>730 MB</strong></div>
-<div>Economia: <strong>470 MB</strong></div>
-<div>Redução: <strong>39%</strong></div>
-<div>Arquivos Analisados: <strong>842</strong></div>
-<div>Arquivos Removidos: <strong>97</strong></div>
-<div>Texturas Otimizadas: <strong>121</strong></div>
-<div>Ganho Estimado: <strong>+8 a +15 FPS</strong></div>
-
-</div>
-
-<div class="mt-8 flex flex-col md:flex-row gap-4">
-
-<a id="downloadBtn"
-class="gradient px-6 py-3 rounded-xl font-bold w-full text-center hidden"
-href="#">
-Baixar Mod Otimizado (.scs)
-</a>
-
-<a id="downloadZipBtn"
-class="bg-gray-700 px-6 py-3 rounded-xl font-bold w-full text-center hidden"
-href="#">
-Baixar ZIP
-</a>
-
-</div>
-
-</div>
-
-</main>
 
 <script>
+const dz=document.getElementById('dropzone');
+const fi=document.getElementById('fi');
+let file=null, blob=null, outName='';
 
-const dropzone = document.getElementById('dropzone');
-const fileInput = document.getElementById('fileInput');
+fi.addEventListener('change',e=>{if(e.target.files[0])setFile(e.target.files[0])});
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over')});
+dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');if(e.dataTransfer.files[0])setFile(e.dataTransfer.files[0])});
 
-let uploadedFile = null;
+function setFile(f){
+  file=f;
+  dz.classList.add('loaded');
+  dz.innerHTML=`<div class="dz-icon" style="color:#3B6D11"><i class="ti ti-circle-check" aria-hidden="true"></i></div>
+<p class="dz-label">Arquivo carregado</p>
+<p class="dz-sub">${f.name} — ${fmt(f.size)}</p>
+<button style="margin-top:10px;padding:6px 16px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);color:var(--color-text-primary);font-size:13px;cursor:pointer" onclick="event.stopPropagation();document.getElementById('fi').click()">Trocar arquivo</button>`;
+  document.getElementById('st').textContent='Arquivo pronto.';
+  document.getElementById('btnOt').disabled=false;
+}
 
-fileInput.addEventListener("change",(e)=>{
+function fmt(b){
+  if(b>=1073741824)return(b/1073741824).toFixed(2)+' GB';
+  if(b>=1048576)return(b/1048576).toFixed(2)+' MB';
+  if(b>=1024)return(b/1024).toFixed(1)+' KB';
+  return b+' B';
+}
 
-    uploadedFile = e.target.files[0];
+function setP(p,msg){
+  document.getElementById('pb').style.width=p+'%';
+  if(msg)document.getElementById('st').textContent=msg;
+}
 
-    if(uploadedFile){
+function addLog(msg){
+  const l=document.getElementById('log');
+  l.textContent+=msg+'\n';
+  l.scrollTop=l.scrollHeight;
+}
 
-        dropzone.innerHTML = `
-        <p class="text-green-400 text-xl font-bold">
-            ✅ Arquivo carregado com sucesso!
-        </p>
-        <p class="mt-2 text-gray-400">
-            ${uploadedFile.name}
-        </p>
-        `;
+const PAT={
+  leve:[/\.tmp$/i,/\.bak$/i,/~$/,/\.log$/i,/\.ds_store$/i,/desktop\.ini$/i],
+  balanceado:[/\.tmp$/i,/\.bak$/i,/~$/,/\.log$/i,/\.ds_store$/i,/desktop\.ini$/i,/thumbs\.db$/i,/\/__macosx\//i,/\/\._/],
+  agressivo:[/\.tmp$/i,/\.bak$/i,/~$/,/\.log$/i,/\.ds_store$/i,/desktop\.ini$/i,/thumbs\.db$/i,/\/__macosx\//i,/\/\._/,/\.psd$/i,/\.ai$/i,/\.psb$/i,/\/(readme|changelog|license|credits|leiame)(\.txt|\.md)?$/i,/\.nfo$/i,/\.url$/i]
+};
 
-        document.getElementById("status").innerText =
-        "Arquivo pronto para otimização.";
+async function run(){
+  if(!file)return;
+  blob=null;
+  document.getElementById('btnOt').disabled=true;
+  document.getElementById('report').style.display='none';
+  document.getElementById('log').textContent='';
+  const mode=document.getElementById('mode').value;
+  const origSize=file.size;
+
+  setP(5,'Lendo arquivo...');
+  addLog('Modo: '+mode);
+  addLog('Arquivo: '+file.name+' ('+fmt(origSize)+')');
+
+  let zip;
+  try{
+    zip=await JSZip.loadAsync(file,{
+      decodeFileName: bytes=>{
+        try{return new TextDecoder('utf-8').decode(bytes)}
+        catch(e){return new TextDecoder('latin1').decode(bytes)}
+      }
+    });
+  }catch(e){
+    setP(0,'Erro: arquivo inválido ou corrompido.');
+    document.getElementById('btnOt').disabled=false;
+    return;
+  }
+
+  setP(15,'Inventariando arquivos...');
+  await tick();
+
+  const entries=Object.entries(zip.files).filter(([,v])=>!v.dir);
+  addLog('Arquivos encontrados: '+entries.length);
+  setP(25,'Analisando conteúdo...');
+  await tick();
+
+  const pats=PAT[mode];
+  const newZip=new JSZip();
+  const removed=[];
+  const kept=[];
+
+  const seenBase=new Map();
+  let removedBytes=0;
+
+  for(const [name,entry] of entries){
+    const lower=name.toLowerCase();
+    let drop=false;
+
+    for(const p of pats){
+      if(p.test(lower)){drop=true;break}
     }
-});
 
-dropzone.addEventListener('dragover',(e)=>{
-    e.preventDefault();
-    dropzone.style.borderColor="#ff6a00";
-});
-
-dropzone.addEventListener('dragleave',()=>{
-    dropzone.style.borderColor="#ffb000";
-});
-
-dropzone.addEventListener('drop',(e)=>{
-
-    e.preventDefault();
-
-    uploadedFile = e.dataTransfer.files[0];
-
-    if(uploadedFile){
-
-        dropzone.innerHTML = `
-        <p class="text-green-400 text-xl font-bold">
-            ✅ Arquivo carregado com sucesso!
-        </p>
-        <p class="mt-2 text-gray-400">
-            ${uploadedFile.name}
-        </p>
-        `;
-
-        document.getElementById("status").innerText =
-        "Arquivo pronto para otimização.";
+    if(!drop && mode==='agressivo'){
+      const base=name.split('/').pop().toLowerCase();
+      if(seenBase.has(base)){
+        drop=true;
+        addLog('  Duplicata: '+name);
+      } else {
+        seenBase.set(base,name);
+      }
     }
 
-});
-
-function optimizeMod(){
-
-    if(!uploadedFile){
-        alert("Selecione um arquivo primeiro!");
-        return;
+    if(drop){
+      removed.push(name);
+      const meta=entry._data;
+      removedBytes+=meta?meta.uncompressedSize||0:0;
+      addLog('  Removido: '+name);
+    } else {
+      kept.push([name,entry]);
     }
+  }
 
-    let progress = 0;
+  addLog('Removidos: '+removed.length+' arquivos');
+  setP(40,'Reempacotando '+kept.length+' arquivos...');
+  await tick();
 
-    const bar = document.getElementById('progressBar');
-    const status = document.getElementById('status');
+  const level=mode==='agressivo'?9:mode==='balanceado'?6:3;
+  const total=kept.length;
+  let done=0;
 
-    status.innerText = "Analisando mod...";
+  for(const [name,entry] of kept){
+    const data=await entry.async('uint8array');
+    const ext=name.split('.').pop().toLowerCase();
+    const compressible=['sii','sui','mat','pmd','pmg','tobj','bank','ogg','wav','ttf','otf','cfg','txt','md','json','xml','ini'];
+    const useComp=compressible.includes(ext)||data.length<50000;
+    newZip.file(name,data,{
+      compression:useComp?'DEFLATE':'STORE',
+      compressionOptions:{level}
+    });
+    done++;
+    if(done%20===0||done===total){
+      const p=40+Math.round((done/total)*40);
+      setP(p,'Reempacotando... '+done+'/'+total);
+      await tick();
+    }
+  }
 
-    const interval = setInterval(()=>{
+  setP(82,'Gerando arquivo final...');
+  await tick();
 
-        progress += 5;
+  blob=await newZip.generateAsync(
+    {type:'blob',compression:'DEFLATE',compressionOptions:{level}},
+    meta=>setP(82+Math.round(meta.percent*0.16),'Compactando... '+Math.round(meta.percent)+'%')
+  );
 
-        bar.style.width = progress + "%";
+  const newSize=blob.size;
+  const saved=origSize-newSize;
+  const pct=origSize>0?Math.round((saved/origSize)*100):0;
+  outName=file.name.replace(/\.(scs|zip)$/i,'')+'_otimizado';
 
-        if(progress >= 20)
-            status.innerText = "Verificando arquivos duplicados...";
+  setP(100,'Concluído!');
+  addLog('---');
+  addLog('Tamanho original:   '+fmt(origSize));
+  addLog('Tamanho otimizado:  '+fmt(newSize));
+  addLog('Economia real:      '+fmt(Math.max(0,saved))+' ('+Math.max(0,pct)+'%)');
+  addLog('Pronto para download.');
 
-        if(progress >= 40)
-            status.innerText = "Otimizando texturas...";
+  document.getElementById('mO').textContent=fmt(origSize);
+  document.getElementById('mN').textContent=fmt(newSize);
+  document.getElementById('mE').textContent=fmt(Math.max(0,saved));
+  document.getElementById('mP').textContent=Math.max(0,pct)+'%';
+  document.getElementById('mT').textContent=entries.length;
+  document.getElementById('mR').textContent=removed.length;
 
-        if(progress >= 60)
-            status.innerText = "Reorganizando estrutura...";
+  document.getElementById('barOlbl').textContent=fmt(origSize);
+  document.getElementById('barNlbl').textContent=fmt(newSize);
+  const ratio=newSize/origSize;
+  document.getElementById('barN').style.width=Math.round(ratio*100)+'%';
 
-        if(progress >= 80)
-            status.innerText = "Compactando mod otimizado...";
+  document.getElementById('report').style.display='block';
+  document.getElementById('btnOt').disabled=false;
+}
 
-        if(progress >= 100){
+function tick(){return new Promise(r=>setTimeout(r,0))}
 
-            clearInterval(interval);
-
-            status.innerText =
-            "✅ Processo concluído com sucesso!";
-
-            document
-            .getElementById('report')
-            .classList.remove('hidden');
-
-            const downloadBtn =
-            document.getElementById("downloadBtn");
-
-            const downloadZipBtn =
-            document.getElementById("downloadZipBtn");
-
-            const url =
-            URL.createObjectURL(uploadedFile);
-
-            const optimizedName =
-            uploadedFile.name.replace(/\.(scs|zip)$/i,"")
-            + "_otimizado.scs";
-
-            downloadBtn.href = url;
-            downloadBtn.download = optimizedName;
-            downloadBtn.classList.remove("hidden");
-
-            downloadZipBtn.href = url;
-            downloadZipBtn.download =
-            optimizedName.replace(".scs",".zip");
-            downloadZipBtn.classList.remove("hidden");
-        }
-
-    },200);
+function dl(ext){
+  if(!blob)return;
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=outName+'.'+ext;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},1500);
 }
 </script>
-
-</body>
-</html>
-```
