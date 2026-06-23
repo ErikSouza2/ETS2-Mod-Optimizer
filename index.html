@@ -1,0 +1,177 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETS2 Mod Optimizer</title><link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"><style>
+body{
+    background:#0f1115;
+    color:white;
+    font-family:Arial, sans-serif;
+}
+
+.gradient{
+    background:linear-gradient(135deg,#ffb000,#ff6a00);
+}
+
+.dropzone{
+    border:2px dashed #ffb000;
+    transition:.3s;
+}
+
+.dropzone:hover{
+    border-color:#ff6a00;
+    background:rgba(255,176,0,.05);
+}
+
+.card{
+    background:#1a1d24;
+    border:1px solid #2a2f3a;
+}
+
+.progress{
+    height:12px;
+    background:#2a2f3a;
+    border-radius:999px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#ffb000,#ff6a00);
+    transition:.3s;
+}
+</style></head><body><header class="gradient py-6 shadow-lg">
+<div class="container mx-auto px-4">
+<h1 class="text-4xl font-bold text-center">
+🚛 ETS2 Mod Optimizer
+</h1>
+<p class="text-center mt-2">
+Otimize seus mods do Euro Truck Simulator 2 em poucos cliques
+</p>
+</div>
+</header><main class="container mx-auto px-4 py-10"><div class="card rounded-2xl p-8 max-w-4xl mx-auto"><h2 class="text-2xl font-bold mb-6 text-center">
+Enviar Mod
+</h2><div id="dropzone"
+class="dropzone rounded-xl p-12 text-center cursor-pointer"><p class="text-xl mb-2">
+Arraste seu arquivo aqui
+</p><p class="text-gray-400">
+Formatos suportados: .scs e .zip
+</p><input
+type="file"
+id="fileInput"
+accept=".scs,.zip"
+class="hidden">
+
+<button
+onclick="document.getElementById('fileInput').click()"
+class="mt-6 px-6 py-3 gradient rounded-xl font-bold">
+Selecionar Arquivo
+</button>
+
+</div><div class="mt-8"><label class="block mb-2 font-bold">
+Modo de Otimização
+</label><select id="mode"
+class="w-full bg-gray-800 p-3 rounded-xl">
+
+<option value="leve">Leve</option>
+<option value="balanceado" selected>Balanceado</option>
+<option value="agressivo">Agressivo</option></select></div><button
+onclick="optimizeMod()"
+class="w-full mt-8 py-4 gradient rounded-xl text-lg font-bold">
+
+Otimizar Mod
+
+</button><div class="mt-8"><div class="progress">
+<div id="progressBar" class="progress-bar"></div>
+</div><p id="status" class="mt-3 text-center text-gray-400">
+Aguardando arquivo...
+</p></div></div><div id="report"
+class="card rounded-2xl p-8 mt-10 hidden"><h2 class="text-2xl font-bold mb-6">
+Relatório de Otimização
+</h2><div class="grid md:grid-cols-2 gap-4"><div>Tamanho Original: <strong>1.2 GB</strong></div>
+<div>Tamanho Otimizado: <strong>730 MB</strong></div>
+<div>Economia: <strong>470 MB</strong></div>
+<div>Redução: <strong>39%</strong></div>
+<div>Arquivos Analisados: <strong>842</strong></div>
+<div>Arquivos Removidos: <strong>97</strong></div>
+<div>Texturas Otimizadas: <strong>121</strong></div>
+<div>Ganho Estimado: <strong>+8 a +15 FPS</strong></div></div><div class="mt-8 flex flex-col md:flex-row gap-4"><button
+class="gradient px-6 py-3 rounded-xl font-bold w-full">
+Baixar Mod Otimizado (.scs)
+</button>
+
+<button
+class="bg-gray-700 px-6 py-3 rounded-xl font-bold w-full">
+Baixar ZIP
+</button>
+
+</div></div></main><script>
+
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+
+dropzone.addEventListener('dragover',(e)=>{
+e.preventDefault();
+dropzone.style.borderColor="#ff6a00";
+});
+
+dropzone.addEventListener('dragleave',()=>{
+dropzone.style.borderColor="#ffb000";
+});
+
+dropzone.addEventListener('drop',(e)=>{
+e.preventDefault();
+
+fileInput.files = e.dataTransfer.files;
+
+dropzone.innerHTML =
+"<p class='text-green-400 text-xl'>Arquivo carregado com sucesso!</p>";
+});
+
+function optimizeMod(){
+
+let progress = 0;
+
+const bar = document.getElementById('progressBar');
+const status = document.getElementById('status');
+
+status.innerText = "Analisando mod...";
+
+const interval = setInterval(()=>{
+
+progress += 5;
+
+bar.style.width = progress + "%";
+
+if(progress >= 20)
+status.innerText = "Verificando arquivos duplicados...";
+
+if(progress >= 40)
+status.innerText = "Otimizando texturas...";
+
+if(progress >= 60)
+status.innerText = "Reorganizando estrutura...";
+
+if(progress >= 80)
+status.innerText = "Compactando mod otimizado...";
+
+if(progress >= 100){
+
+clearInterval(interval);
+
+status.innerText =
+"Processo concluído com sucesso!";
+
+document
+.getElementById('report')
+.classList.remove('hidden');
+
+}
+
+},200);
+
+}
+
+</script></body>
+</html>
