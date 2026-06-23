@@ -1,65 +1,68 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif}
 .wrap{padding:1rem 0}
-.header{background:#ff8c00;border-radius:var(--border-radius-lg);padding:1.5rem;text-align:center;margin-bottom:1.25rem}
+.header{background:#ff8c00;border-radius:12px;padding:1.5rem;text-align:center;margin-bottom:1.25rem}
 .header h1{font-size:22px;font-weight:500;color:#fff}
 .header p{font-size:13px;color:rgba(255,255,255,.85);margin-top:4px}
-.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1rem}
-.dropzone{border:2px dashed #ff8c00;border-radius:var(--border-radius-md);padding:2rem 1rem;text-align:center;cursor:pointer;transition:background .2s}
-.dropzone:hover,.dropzone.over{background:rgba(255,140,0,.07);border-color:#e65c00}
+.card{background:var(--color-background-primary,#fff);border:0.5px solid var(--color-border-tertiary,#ddd);border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.dropzone{border:2px dashed #ff8c00;border-radius:8px;padding:2rem 1rem;text-align:center;cursor:pointer;transition:background .2s}
+.dropzone:hover,.dropzone.over{background:rgba(255,140,0,.07)}
 .dropzone.loaded{border-color:#3B6D11;background:rgba(59,109,17,.06)}
-.dz-icon{font-size:28px;color:#ff8c00;margin-bottom:8px}
-.dz-label{font-size:15px;font-weight:500;color:var(--color-text-primary)}
-.dz-sub{font-size:13px;color:var(--color-text-secondary);margin-top:4px}
-.fl{font-size:13px;color:var(--color-text-secondary);display:block;margin-bottom:6px;margin-top:1rem}
-.progress-track{height:10px;background:var(--color-background-secondary);border-radius:999px;overflow:hidden;margin-top:1rem}
-.progress-fill{height:100%;width:0%;background:#ff8c00;border-radius:999px;transition:width .2s}
-.status-txt{font-size:13px;color:var(--color-text-secondary);margin-top:8px;text-align:center;min-height:18px}
-.btn-main{width:100%;padding:11px;background:#ff8c00;border:none;border-radius:var(--border-radius-md);color:#fff;font-size:15px;font-weight:500;cursor:pointer;margin-top:1rem}
+.fl{font-size:13px;color:var(--color-text-secondary,#666);display:block;margin-bottom:6px;margin-top:1rem}
+.progress-track{height:10px;background:var(--color-background-secondary,#f0f0f0);border-radius:999px;overflow:hidden;margin-top:1rem}
+.progress-fill{height:100%;width:0%;background:#ff8c00;border-radius:999px;transition:width .15s}
+.status-txt{font-size:13px;color:var(--color-text-secondary,#666);margin-top:8px;text-align:center;min-height:18px}
+.btn-main{width:100%;padding:11px;background:#ff8c00;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:500;cursor:pointer;margin-top:1rem}
 .btn-main:disabled{opacity:.4;cursor:not-allowed}
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:1rem}
-.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
-.metric-label{font-size:12px;color:var(--color-text-secondary)}
-.metric-value{font-size:17px;font-weight:500;color:var(--color-text-primary);margin-top:3px}
-.metric-value.green{color:var(--color-text-success)}
-.btn-dl{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;border-radius:var(--border-radius-md);font-size:14px;font-weight:500;cursor:pointer;border:none;margin-bottom:8px;color:#fff;background:#ff8c00}
-.btn-dl.sec{background:none;border:0.5px solid var(--color-border-secondary);color:var(--color-text-primary)}
-.log-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;font-size:12px;font-family:var(--font-mono);color:var(--color-text-secondary);max-height:140px;overflow-y:auto;line-height:1.7;white-space:pre-wrap}
-.sec-title{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:1rem}
+.metric{background:var(--color-background-secondary,#f5f5f5);border-radius:8px;padding:10px 12px}
+.metric-label{font-size:11px;color:var(--color-text-secondary,#888)}
+.metric-value{font-size:17px;font-weight:600;color:var(--color-text-primary,#111);margin-top:3px}
+.metric-value.green{color:#3B6D11}
+.btn-dl{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:none;margin-bottom:8px;color:#fff;background:#ff8c00}
+.btn-dl.sec{background:none;border:0.5px solid var(--color-border-secondary,#ccc);color:var(--color-text-primary,#111)}
+.btn-dl:disabled{opacity:.4;cursor:not-allowed}
+.log-box{background:var(--color-background-secondary,#f5f5f5);border-radius:8px;padding:10px 12px;font-size:11.5px;font-family:monospace;color:var(--color-text-secondary,#666);max-height:160px;overflow-y:auto;line-height:1.75;white-space:pre-wrap}
+.sec-title{font-size:15px;font-weight:600;color:var(--color-text-primary,#111);margin-bottom:1rem}
 #report{display:none}
 .bar-wrap{margin-top:.75rem}
-.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--color-text-secondary)}
-.bar-bg{flex:1;height:8px;background:var(--color-background-secondary);border-radius:999px;overflow:hidden}
-.bar-inner{height:100%;border-radius:999px;background:#ff8c00}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--color-text-secondary,#666)}
+.bar-bg{flex:1;height:8px;background:var(--color-background-secondary,#eee);border-radius:999px;overflow:hidden}
+.bar-inner{height:100%;border-radius:999px;background:#ff8c00;transition:width .4s}
 .bar-inner.new{background:#3B6D11}
+select{width:100%;padding:8px 10px;border:0.5px solid var(--color-border-secondary,#ccc);border-radius:8px;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#111);font-size:13px}
+.info-box{background:rgba(255,140,0,.08);border:1px solid rgba(255,140,0,.3);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--color-text-secondary,#555);margin-top:10px;line-height:1.6}
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 <div class="wrap">
-<h2 class="sr-only">ETS2 Mod Optimizer — otimizador de mods do Euro Truck Simulator 2</h2>
-
 <div class="header">
-  <h1>ETS2 Mod Optimizer</h1>
+  <h1>🚛 ETS2 Mod Optimizer</h1>
   <p>Otimize mods do Euro Truck Simulator 2 diretamente no navegador</p>
 </div>
 
 <div class="card">
   <div id="dropzone" class="dropzone" onclick="document.getElementById('fi').click()">
-    <div class="dz-icon"><i class="ti ti-file-zip" aria-hidden="true"></i></div>
-    <p class="dz-label">Arraste seu arquivo aqui</p>
-    <p class="dz-sub">Formatos suportados: .scs e .zip</p>
-    <button style="margin-top:12px;padding:7px 18px;background:#ff8c00;border:none;border-radius:var(--border-radius-md);color:#fff;font-size:13px;cursor:pointer" onclick="event.stopPropagation();document.getElementById('fi').click()">Selecionar arquivo</button>
+    <div style="font-size:28px;margin-bottom:8px">📦</div>
+    <p style="font-size:15px;font-weight:500;color:var(--color-text-primary,#111)">Arraste seu arquivo aqui</p>
+    <p style="font-size:13px;color:var(--color-text-secondary,#666);margin-top:4px">Formatos suportados: .scs e .zip</p>
+    <button style="margin-top:12px;padding:7px 18px;background:#ff8c00;border:none;border-radius:8px;color:#fff;font-size:13px;cursor:pointer" onclick="event.stopPropagation();document.getElementById('fi').click()">Selecionar arquivo</button>
   </div>
   <input type="file" id="fi" accept=".scs,.zip" style="display:none">
 
   <label class="fl">Modo de otimização</label>
-  <select id="mode" style="width:100%">
-    <option value="leve">Leve — remove apenas lixo (.tmp, .bak, .log, .DS_Store)</option>
-    <option value="balanceado" selected>Balanceado — leve + duplicatas, thumbs, __MACOSX</option>
-    <option value="agressivo">Agressivo — balanceado + .psd/.ai, docs, maior compressão</option>
+  <select id="mode">
+    <option value="leve">Leve — remove lixo (.tmp, .bak, .log, .DS_Store)</option>
+    <option value="balanceado" selected>Balanceado — leve + thumbs, __MACOSX + melhor compressão</option>
+    <option value="agressivo">Agressivo — balanceado + .psd/.ai, docs + compressão máxima</option>
   </select>
+
+  <div class="info-box">
+    ℹ️ <strong>Como funciona:</strong> arquivos de texto/dados do mod (.sii, .sui, .mat, .cfg…) são recomprimidos com nível mais alto. Arquivos binários já comprimidos (.dds, .pmg…) são mantidos intactos para evitar corrupção. A economia real depende do quanto o mod original já estava comprimido.
+  </div>
 
   <button class="btn-main" id="btnOt" onclick="run()" disabled>Otimizar mod</button>
   <div class="progress-track"><div class="progress-fill" id="pb"></div></div>
@@ -73,8 +76,10 @@
     <div class="metric"><div class="metric-label">Tamanho otimizado</div><div class="metric-value" id="mN">—</div></div>
     <div class="metric"><div class="metric-label">Economia</div><div class="metric-value green" id="mE">—</div></div>
     <div class="metric"><div class="metric-label">Redução</div><div class="metric-value green" id="mP">—</div></div>
-    <div class="metric"><div class="metric-label">Arquivos lidos</div><div class="metric-value" id="mT">—</div></div>
+    <div class="metric"><div class="metric-label">Arquivos</div><div class="metric-value" id="mT">—</div></div>
     <div class="metric"><div class="metric-label">Removidos</div><div class="metric-value" id="mR">—</div></div>
+    <div class="metric"><div class="metric-label">Recomprimidos</div><div class="metric-value green" id="mC">—</div></div>
+    <div class="metric"><div class="metric-label">Mantidos</div><div class="metric-value" id="mK">—</div></div>
   </div>
 
   <div class="bar-wrap">
@@ -85,7 +90,7 @@
     </div>
     <div class="bar-row">
       <span style="min-width:80px">Otimizado</span>
-      <div class="bar-bg"><div class="bar-inner new" id="barN"></div></div>
+      <div class="bar-bg"><div class="bar-inner new" id="barN" style="width:0%"></div></div>
       <span id="barNlbl" style="min-width:60px;text-align:right"></span>
     </div>
   </div>
@@ -93,34 +98,36 @@
   <label class="fl" style="margin-top:1rem">Log de otimização</label>
   <div class="log-box" id="log"></div>
 
-  <button class="btn-dl" style="margin-top:1rem" id="btnZip" onclick="dl('zip')">
-    <i class="ti ti-download" aria-hidden="true"></i> Baixar mod otimizado (.zip)
-  </button>
-  <button class="btn-dl sec" id="btnScs" onclick="dl('scs')">
-    <i class="ti ti-download" aria-hidden="true"></i> Baixar como .scs
-  </button>
+  <button class="btn-dl" style="margin-top:1rem" id="btnZip" onclick="dl('zip')" disabled>⬇️ Baixar mod otimizado (.zip)</button>
+  <button class="btn-dl sec" id="btnScs" onclick="dl('scs')" disabled>⬇️ Baixar como .scs</button>
 </div>
 </div>
 
 <script>
 const dz=document.getElementById('dropzone');
 const fi=document.getElementById('fi');
-let file=null, blob=null, outName='';
+let file=null,blob=null,outName='';
 
 fi.addEventListener('change',e=>{if(e.target.files[0])setFile(e.target.files[0])});
 dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over')});
 dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
-dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');if(e.dataTransfer.files[0])setFile(e.dataTransfer.files[0])});
+dz.addEventListener('drop',e=>{
+  e.preventDefault();dz.classList.remove('over');
+  if(e.dataTransfer.files[0])setFile(e.dataTransfer.files[0]);
+});
 
 function setFile(f){
-  file=f;
+  file=f;blob=null;
   dz.classList.add('loaded');
-  dz.innerHTML=`<div class="dz-icon" style="color:#3B6D11"><i class="ti ti-circle-check" aria-hidden="true"></i></div>
-<p class="dz-label">Arquivo carregado</p>
-<p class="dz-sub">${f.name} — ${fmt(f.size)}</p>
-<button style="margin-top:10px;padding:6px 16px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);color:var(--color-text-primary);font-size:13px;cursor:pointer" onclick="event.stopPropagation();document.getElementById('fi').click()">Trocar arquivo</button>`;
+  dz.innerHTML=`<div style="font-size:28px;color:#3B6D11;margin-bottom:8px">✅</div>
+<p style="font-size:15px;font-weight:500;color:var(--color-text-primary,#111)">Arquivo carregado</p>
+<p style="font-size:13px;color:var(--color-text-secondary,#666);margin-top:4px">${f.name} — ${fmt(f.size)}</p>
+<button style="margin-top:10px;padding:6px 16px;background:var(--color-background-secondary,#f0f0f0);border:0.5px solid #ccc;border-radius:8px;font-size:13px;cursor:pointer" onclick="event.stopPropagation();document.getElementById('fi').click()">Trocar arquivo</button>`;
   document.getElementById('st').textContent='Arquivo pronto.';
   document.getElementById('btnOt').disabled=false;
+  document.getElementById('report').style.display='none';
+  document.getElementById('btnZip').disabled=true;
+  document.getElementById('btnScs').disabled=true;
 }
 
 function fmt(b){
@@ -129,47 +136,81 @@ function fmt(b){
   if(b>=1024)return(b/1024).toFixed(1)+' KB';
   return b+' B';
 }
-
 function setP(p,msg){
   document.getElementById('pb').style.width=p+'%';
   if(msg)document.getElementById('st').textContent=msg;
 }
-
 function addLog(msg){
   const l=document.getElementById('log');
   l.textContent+=msg+'\n';
   l.scrollTop=l.scrollHeight;
 }
+function tick(){return new Promise(r=>setTimeout(r,0));}
 
+// Padrões de remoção por modo
 const PAT={
   leve:[/\.tmp$/i,/\.bak$/i,/~$/,/\.log$/i,/\.ds_store$/i,/desktop\.ini$/i],
-  balanceado:[/\.tmp$/i,/\.bak$/i,/~$/,/\.log$/i,/\.ds_store$/i,/desktop\.ini$/i,/thumbs\.db$/i,/\/__macosx\//i,/\/\._/],
-  agressivo:[/\.tmp$/i,/\.bak$/i,/~$/,/\.log$/i,/\.ds_store$/i,/desktop\.ini$/i,/thumbs\.db$/i,/\/__macosx\//i,/\/\._/,/\.psd$/i,/\.ai$/i,/\.psb$/i,/\/(readme|changelog|license|credits|leiame)(\.txt|\.md)?$/i,/\.nfo$/i,/\.url$/i]
+  balanceado:[/\.tmp$/i,/\.bak$/i,/~$/,/\.log$/i,/\.ds_store$/i,/desktop\.ini$/i,
+    /thumbs\.db$/i,/(^|\/)__macosx\//i,/(^|\/)\._[^/]+$/i],
+  agressivo:[/\.tmp$/i,/\.bak$/i,/~$/,/\.log$/i,/\.ds_store$/i,/desktop\.ini$/i,
+    /thumbs\.db$/i,/(^|\/)__macosx\//i,/(^|\/)\._[^/]+$/i,
+    /\.psd$/i,/\.ai$/i,/\.psb$/i,
+    /(^|\/)(readme|changelog|license|credits|leiame)(\.txt|\.md|\.nfo)?$/i,
+    /\.url$/i,/\.nfo$/i]
 };
+
+// Extensões binárias já comprimidas — copiar sem recomprimir (STORE)
+const STORE_EXTS=new Set([
+  'dds','png','jpg','jpeg','gif','bmp','tga','webp',
+  'ogg','mp3','wav','flac','aac','wem',
+  'bank','bnk','fsb',
+  'zip','rar','7z','gz','xz','bz2',
+  'pmg','pmd','pmc','ppd','soundref',
+  'dxbc'
+]);
+
+// Extensões de texto/dados — recomprimir com DEFLATE
+const DEFLATE_EXTS=new Set([
+  'sii','sui','mat','tobj','cfg','ini','txt','md','json','xml',
+  'soundref','ttf','otf','fnt','css','js','html','htm'
+]);
+
+function getCompression(name){
+  const ext=name.split('.').pop().toLowerCase();
+  if(STORE_EXTS.has(ext)) return 'STORE';
+  if(DEFLATE_EXTS.has(ext)) return 'DEFLATE';
+  // Para extensões desconhecidas: tenta DEFLATE mas apenas se arquivo < 1MB
+  return 'DEFLATE';
+}
 
 async function run(){
   if(!file)return;
   blob=null;
   document.getElementById('btnOt').disabled=true;
+  document.getElementById('btnZip').disabled=true;
+  document.getElementById('btnScs').disabled=true;
   document.getElementById('report').style.display='none';
   document.getElementById('log').textContent='';
+
   const mode=document.getElementById('mode').value;
   const origSize=file.size;
 
   setP(5,'Lendo arquivo...');
-  addLog('Modo: '+mode);
-  addLog('Arquivo: '+file.name+' ('+fmt(origSize)+')');
+  addLog('▶ Modo: '+mode);
+  addLog('▶ Arquivo: '+file.name+' ('+fmt(origSize)+')');
+  await tick();
 
   let zip;
   try{
     zip=await JSZip.loadAsync(file,{
-      decodeFileName: bytes=>{
+      decodeFileName:bytes=>{
         try{return new TextDecoder('utf-8').decode(bytes)}
         catch(e){return new TextDecoder('latin1').decode(bytes)}
       }
     });
   }catch(e){
     setP(0,'Erro: arquivo inválido ou corrompido.');
+    addLog('✗ Erro ao abrir: '+e.message);
     document.getElementById('btnOt').disabled=false;
     return;
   }
@@ -178,117 +219,137 @@ async function run(){
   await tick();
 
   const entries=Object.entries(zip.files).filter(([,v])=>!v.dir);
-  addLog('Arquivos encontrados: '+entries.length);
-  setP(25,'Analisando conteúdo...');
+  addLog('▶ Arquivos encontrados: '+entries.length);
+  setP(20,'Filtrando arquivos...');
   await tick();
 
   const pats=PAT[mode];
-  const newZip=new JSZip();
-  const removed=[];
-  const kept=[];
-
-  const seenBase=new Map();
-  let removedBytes=0;
+  const toRemove=[];
+  const toKeep=[];
 
   for(const [name,entry] of entries){
     const lower=name.toLowerCase();
     let drop=false;
-
-    for(const p of pats){
-      if(p.test(lower)){drop=true;break}
-    }
-
-    if(!drop && mode==='agressivo'){
-      const base=name.split('/').pop().toLowerCase();
-      if(seenBase.has(base)){
-        drop=true;
-        addLog('  Duplicata: '+name);
-      } else {
-        seenBase.set(base,name);
-      }
-    }
-
-    if(drop){
-      removed.push(name);
-      const meta=entry._data;
-      removedBytes+=meta?meta.uncompressedSize||0:0;
-      addLog('  Removido: '+name);
-    } else {
-      kept.push([name,entry]);
-    }
+    for(const p of pats){if(p.test(lower)){drop=true;break}}
+    if(drop) toRemove.push(name);
+    else toKeep.push([name,entry]);
   }
 
-  addLog('Removidos: '+removed.length+' arquivos');
-  setP(40,'Reempacotando '+kept.length+' arquivos...');
+  if(toRemove.length>0){
+    addLog('▶ Removendo '+toRemove.length+' arquivo(s) desnecessário(s):');
+    toRemove.forEach(n=>addLog('  ✗ '+n));
+  } else {
+    addLog('▶ Nenhum arquivo desnecessário encontrado no modo '+mode);
+  }
+
+  setP(30,'Recomprimindo '+toKeep.length+' arquivos...');
   await tick();
 
-  const level=mode==='agressivo'?9:mode==='balanceado'?6:3;
-  const total=kept.length;
+  const level=mode==='agressivo'?9:mode==='balanceado'?7:5;
+  const newZip=new JSZip();
+  let countRecompressed=0;
+  let countStored=0;
+  let countError=0;
+  const total=toKeep.length;
   let done=0;
 
-  for(const [name,entry] of kept){
-    const data=await entry.async('uint8array');
-    const ext=name.split('.').pop().toLowerCase();
-    const compressible=['sii','sui','mat','pmd','pmg','tobj','bank','ogg','wav','ttf','otf','cfg','txt','md','json','xml','ini'];
-    const useComp=compressible.includes(ext)||data.length<50000;
-    newZip.file(name,data,{
-      compression:useComp?'DEFLATE':'STORE',
-      compressionOptions:{level}
-    });
+  for(const [name,entry] of toKeep){
+    let data;
+    try{
+      // Lê os dados descomprimidos do arquivo original
+      data=await entry.async('uint8array');
+    }catch(e){
+      addLog('  ⚠ Falha ao ler: '+name+' — mantido original');
+      countError++;
+      done++;
+      continue;
+    }
+
+    const comp=getCompression(name);
+
+    if(comp==='STORE'){
+      // Binários: copiar sem recomprimir
+      newZip.file(name,data,{compression:'STORE'});
+      countStored++;
+    } else {
+      // Texto/dados: recomprimir com nível mais alto
+      newZip.file(name,data,{
+        compression:'DEFLATE',
+        compressionOptions:{level}
+      });
+      countRecompressed++;
+    }
+
     done++;
-    if(done%20===0||done===total){
-      const p=40+Math.round((done/total)*40);
-      setP(p,'Reempacotando... '+done+'/'+total);
+    if(done%15===0||done===total){
+      const p=30+Math.round((done/total)*50);
+      setP(p,'Processando... '+done+'/'+total);
       await tick();
     }
   }
 
   setP(82,'Gerando arquivo final...');
+  addLog('▶ Gerando ZIP final (nível '+level+')...');
   await tick();
 
-  blob=await newZip.generateAsync(
-    {type:'blob',compression:'DEFLATE',compressionOptions:{level}},
-    meta=>setP(82+Math.round(meta.percent*0.16),'Compactando... '+Math.round(meta.percent)+'%')
-  );
+  try{
+    blob=await newZip.generateAsync(
+      {type:'blob'},
+      meta=>setP(82+Math.round(meta.percent*0.16),'Finalizando... '+Math.round(meta.percent)+'%')
+    );
+  }catch(e){
+    setP(0,'Erro ao gerar arquivo: '+e.message);
+    addLog('✗ Erro: '+e.message);
+    document.getElementById('btnOt').disabled=false;
+    return;
+  }
 
   const newSize=blob.size;
-  const saved=origSize-newSize;
+  const saved=Math.max(0,origSize-newSize);
   const pct=origSize>0?Math.round((saved/origSize)*100):0;
   outName=file.name.replace(/\.(scs|zip)$/i,'')+'_otimizado';
 
-  setP(100,'Concluído!');
-  addLog('---');
-  addLog('Tamanho original:   '+fmt(origSize));
-  addLog('Tamanho otimizado:  '+fmt(newSize));
-  addLog('Economia real:      '+fmt(Math.max(0,saved))+' ('+Math.max(0,pct)+'%)');
-  addLog('Pronto para download.');
+  setP(100,'✅ Concluído!');
+
+  addLog('');
+  addLog('━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  addLog('Tamanho original:    '+fmt(origSize));
+  addLog('Tamanho otimizado:   '+fmt(newSize));
+  addLog('Economia:            '+fmt(saved)+' ('+pct+'%)');
+  addLog('Arquivos removidos:  '+toRemove.length);
+  addLog('Recomprimidos:       '+countRecompressed);
+  addLog('Binários mantidos:   '+countStored);
+  if(countError>0) addLog('Erros de leitura:    '+countError);
+  addLog('━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  if(pct===0) addLog('ℹ O mod já estava bem otimizado. Arquivos desnecessários foram removidos e dados recomprimidos, mas o tamanho final é similar.');
+  addLog('✅ Pronto para download!');
 
   document.getElementById('mO').textContent=fmt(origSize);
   document.getElementById('mN').textContent=fmt(newSize);
-  document.getElementById('mE').textContent=fmt(Math.max(0,saved));
-  document.getElementById('mP').textContent=Math.max(0,pct)+'%';
+  document.getElementById('mE').textContent=fmt(saved);
+  document.getElementById('mP').textContent=pct+'%';
   document.getElementById('mT').textContent=entries.length;
-  document.getElementById('mR').textContent=removed.length;
+  document.getElementById('mR').textContent=toRemove.length;
+  document.getElementById('mC').textContent=countRecompressed;
+  document.getElementById('mK').textContent=countStored;
 
   document.getElementById('barOlbl').textContent=fmt(origSize);
   document.getElementById('barNlbl').textContent=fmt(newSize);
-  const ratio=newSize/origSize;
+  const ratio=origSize>0?Math.min(newSize/origSize,1):1;
   document.getElementById('barN').style.width=Math.round(ratio*100)+'%';
 
   document.getElementById('report').style.display='block';
   document.getElementById('btnOt').disabled=false;
+  document.getElementById('btnZip').disabled=false;
+  document.getElementById('btnScs').disabled=false;
 }
-
-function tick(){return new Promise(r=>setTimeout(r,0))}
 
 function dl(ext){
   if(!blob)return;
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
-  a.href=url;
-  a.download=outName+'.'+ext;
-  document.body.appendChild(a);
-  a.click();
+  a.href=url;a.download=outName+'.'+ext;
+  document.body.appendChild(a);a.click();
   setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},1500);
 }
 </script>
